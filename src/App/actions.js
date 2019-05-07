@@ -1,23 +1,6 @@
-/* export function readEndpoint(url){
-    {fetch(url)
-    .then(function(response){
-        return response.json();
-    }).then(function(endpointAsJSON){
-        console.log(JSON.stringify(endpointAsJSON));
-        return JSON.stringify(endpointAsJSON);
-    }).then(items => ( endpointIsRead(items)))
-} 
-
-}
- */
-/* export function fetchData(url){
-    return dispatch => {
-        dispatch(readEndpoint(true))
-        return fetch(url).then(response => response.json())
-        .then(json => dispatch(endpointIsRead(json)))
-    }
-} */
-
+import axios from 'axios'
+import * as bluebird from 'bluebird'
+import { request } from 'http';
 
 //REQUEST
 
@@ -41,7 +24,8 @@ export function endpointIsRead(url, json) {
 
 //FETCH
 
-export function fetchData(url){
+//Uses fetch
+/* export function fetchData(url){
     return function(dispatch){
         dispatch(requestEndpoint(url));
 
@@ -52,29 +36,35 @@ export function fetchData(url){
             console.log(JSON.stringify(json));
         })
     }
-}
-
-
- /* export function fetchData(url){
-  return (dispatch) => {
-      fetch(url)
-      .then(res => res.json())
-      .then( data => dispatch(endpointIsRead(data)))
-      
-  }    */
-//   fetch(url)
-//    .then(res=> res.json())
-//    //.then(res=> console.log(JSON.stringify(res)))
-//    .then(( data) => (endpointIsRead((data))))
-
-   //console.log("DATA HERE: ", data)
-    //return endpointIsRead(data)
-//} 
-/* 
-export function endpointIsRead(data) {
-    console.log("What is the data here: ", data)
-    return {
-        type: "GET_DATA",
-        payload: data
-    }
 } */
+
+//Uses AXIOS
+ export function fetchData(url){
+    return function(dispatch){
+        dispatch(requestEndpoint(url));
+
+        axios.get(url)
+        .then(response =>{
+            dispatch(endpointIsRead(url, response.data));
+            console.log(response.data);
+        })
+    }
+} 
+
+
+//Look at : https://nodesource.com/blog/enterprise-grade-node-js-promises-with-async-and-bluebird/
+//Uses Bluebird
+/* export function fetchData(url){
+    return function(dispatch){
+        dispatch(requestEndpoint(url));
+
+        request.get(url)
+        .then(response => response.json())
+        .then(json=>{
+            dispatch(endpointIsRead(url, json));
+            console.log(JSON.stringify(json));
+        })
+    }
+}
+ */
+//Uses async/await
